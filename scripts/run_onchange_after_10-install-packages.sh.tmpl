@@ -28,6 +28,9 @@ while IFS= read -r tap_name; do
   [ -n "$tap_name" ] || continue
   if ! brew tap "$tap_name"; then
     printf 'tap:%s\n' "$tap_name" >> "$failure_file"
+  elif [ "$tap_name" = nikitabobko/tap ]; then
+    # Trust only AeroSpace, not every current and future artifact in the tap.
+    brew trust --cask nikitabobko/tap/aerospace || true
   fi
 done < <(brew bundle list --tap --file="$brewfile")
 
