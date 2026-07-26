@@ -1,0 +1,49 @@
+# Portable zsh configuration managed by chezmoi.
+
+if command -v brew >/dev/null 2>&1; then
+  eval "$(brew shellenv)"
+  brew_prefix="$(brew --prefix)"
+
+  if [ -f "$brew_prefix/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
+    source "$brew_prefix/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+  fi
+fi
+
+if command -v fnm >/dev/null 2>&1; then
+  eval "$(fnm env --use-on-cd --shell zsh)"
+fi
+
+if command -v starship >/dev/null 2>&1; then
+  eval "$(starship init zsh)"
+fi
+
+export EDITOR=nvim
+export VISUAL=nvim
+
+if command -v eza >/dev/null 2>&1; then
+  alias ls='eza --icons'
+  alias ll='eza -l --icons'
+  alias la='eza -la --icons'
+fi
+alias g='git'
+alias v='nvim'
+
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=10000
+SAVEHIST=10000
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_VERIFY
+setopt SHARE_HISTORY
+setopt EXTENDED_HISTORY
+setopt INC_APPEND_HISTORY
+setopt AUTO_CD
+setopt PUSHD_IGNORE_DUPS
+
+autoload -Uz compinit
+compinit
+
+# Syntax highlighting must be sourced after completion and other plugins.
+if [ -n "${brew_prefix:-}" ] && [ -f "$brew_prefix/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]; then
+  source "$brew_prefix/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+fi

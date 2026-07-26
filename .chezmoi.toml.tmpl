@@ -1,0 +1,15 @@
+{{- $profiles := list "work" "personal" -}}
+{{- $profile := promptChoiceOnce . "profile" "Machine profile" $profiles "work" -}}
+{{- $fullInstall := promptBoolOnce . "fullInstall" "Install optional desktop applications" true -}}
+{{- $gitName := promptStringOnce . "gitName" "Git author name" -}}
+{{- $gitEmail := promptStringOnce . "gitEmail" "Git author email" -}}
+{{- $workRoot := promptStringOnce . "workRoot" "Root directory for work repositories" (joinPath .chezmoi.homeDir "work") -}}
+
+[data]
+    profile = {{ $profile | quote }}
+    fullInstall = {{ $fullInstall }}
+    workRoot = {{ $workRoot | quote }}
+
+    [data.git]
+        name = {{ $gitName | quote }}
+        email = {{ $gitEmail | quote }}

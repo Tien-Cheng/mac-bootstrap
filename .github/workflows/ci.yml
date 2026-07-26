@@ -1,0 +1,25 @@
+name: Validate
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  macos:
+    runs-on: macos-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install validation tools
+        run: brew install chezmoi gitleaks neovim shellcheck tree-sitter-cli uv
+
+      - name: Validate both profiles
+        run: ./tests/test.sh
+
+      - name: Scan Git history
+        run: gitleaks git --redact .

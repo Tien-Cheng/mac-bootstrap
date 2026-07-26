@@ -1,0 +1,41 @@
+[user]
+	useConfigOnly = true
+
+[includeIf "gitdir:{{ .workRoot }}/"]
+	path = ~/.config/git/work
+
+[init]
+	defaultBranch = main
+
+[core]
+	editor = nvim
+	excludesfile = ~/.gitignore
+	pager = delta
+
+[interactive]
+	diffFilter = delta --color-only
+
+[delta]
+	navigate = true
+	side-by-side = true
+	hyperlinks = true
+
+[merge]
+	conflictStyle = zdiff3
+
+[pull]
+	rebase = true
+
+[push]
+	autoSetupRemote = true
+	default = current
+
+[rebase]
+	autoStash = true
+	autoSquash = true
+
+[alias]
+	s = status --short --branch
+	lg = log --graph --decorate --oneline --all
+	ai = add --patch
+	pf = push --force-with-lease

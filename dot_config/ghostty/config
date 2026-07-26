@@ -1,0 +1,3 @@
+font-family = "MesloLGS Nerd Font Mono"
+theme = "Xcode WWDC"
+command = "/bin/zsh"

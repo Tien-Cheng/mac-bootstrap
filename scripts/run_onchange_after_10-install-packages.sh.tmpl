@@ -1,0 +1,58 @@
+#!/bin/bash
+
+# Rendered Brewfile checksum: {{ includeTemplate "dot_Brewfile.tmpl" . | sha256sum }}
+
+set -u
+set -o pipefail
+
+brew_bin="$(command -v brew 2>/dev/null || true)"
+if [ -z "$brew_bin" ]; then
+  printf '%s\n' 'brew is required before package installation.' >&2
+  exit 1
+fi
+
+eval "$("$brew_bin" shellenv)"
+
+brewfile="$HOME/.Brewfile"
+state_dir="$HOME/.local/state/mac-bootstrap"
+failure_file="$state_dir/optional-failures"
+mkdir -p "$state_dir"
+: > "$failure_file"
+
+if [ ! -f "$brewfile" ]; then
+  printf 'Missing Brewfile: %s\n' "$brewfile" >&2
+  exit 1
+fi
+
+while IFS= read -r tap_name; do
+  [ -n "$tap_name" ] || continue
+  if ! brew tap "$tap_name"; then
+    printf 'tap:%s\n' "$tap_name" >> "$failure_file"
+  fi
+done < <(brew bundle list --tap --file="$brewfile")
+
+while IFS= read -r formula; do
+  [ -n "$formula" ] || continue
+  if brew install "$formula"; then
+    continue
+  fi
+
+  if [ "$formula" = bitwarden-cli ]; then
+    printf 'formula:%s\n' "$formula" >> "$failure_file"
+    continue
+  fi
+
+  printf 'Core formula failed: %s\n' "$formula" >&2
+  exit 1
+done < <(brew bundle list --formula --file="$brewfile")
+
+while IFS= read -r cask_name; do
+  [ -n "$cask_name" ] || continue
+  if ! brew install --cask "$cask_name"; then
+    printf 'cask:%s\n' "$cask_name" >> "$failure_file"
+  fi
+done < <(brew bundle list --cask --file="$brewfile")
+
+if [ -s "$failure_file" ]; then
+  printf '%s\n' 'Optional packages failed; continuing with the remaining setup.' >&2
+fi
