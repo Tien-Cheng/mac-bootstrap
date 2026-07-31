@@ -43,6 +43,18 @@ setopt PUSHD_IGNORE_DUPS
 autoload -Uz compinit
 compinit
 
+if command -v fzf >/dev/null 2>&1; then
+  source <(fzf --zsh)
+fi
+
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+fi
+
+if command -v direnv >/dev/null 2>&1; then
+  eval "$(direnv hook zsh)"
+fi
+
 # Syntax highlighting must be sourced after completion and other plugins.
 if [ -n "${brew_prefix:-}" ] && [ -f "$brew_prefix/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]; then
   source "$brew_prefix/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
