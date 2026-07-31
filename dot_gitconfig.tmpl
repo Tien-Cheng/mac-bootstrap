@@ -39,3 +39,9 @@
 	lg = log --graph --decorate --oneline --all
 	ai = add --patch
 	pf = push --force-with-lease
+
+# Machine-local Git configuration (credential helpers, employer hosts and
+# certificates) stays out of this repository. Loaded last so it wins, and
+# ignored when absent. This file is intentionally unmanaged.
+[include]
+	path = ~/.gitconfig.local
