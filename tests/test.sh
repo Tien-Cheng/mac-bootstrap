@@ -67,8 +67,12 @@ EOF
   test -f "$render_home/.gitconfig"
   test -f "$render_home/.config/git/work"
   test -f "$render_home/.config/nvim/init.lua"
-  test -f "$render_home/.aerospace.toml"
   test -f "$render_home/.ssh/config"
+  if [ "$profile_name" = personal ]; then
+    test -f "$render_home/.aerospace.toml"
+  else
+    test ! -e "$render_home/.aerospace.toml"
+  fi
 
   zsh -n "$render_home/.zshrc"
   git config --file "$render_home/.gitconfig" --list >/dev/null
@@ -81,18 +85,18 @@ EOF
   fi
   HOME="$render_home" ssh -G -T example.invalid -F "$render_home/.ssh/config" >/dev/null
   brew bundle list --all --file="$render_home/.Brewfile" >/dev/null
-  uv run --python 3.12 python -c \
-    'import pathlib, tomllib; tomllib.loads(pathlib.Path("'"$render_home/.aerospace.toml"'").read_text())'
 
-  for required_item in cursor claude-code codex aerospace brave-browser bitwarden ghostty; do
+  for required_item in codex cursor ghostty; do
     rg -q "cask \"$required_item\"" "$render_home/.Brewfile"
   done
 
   if [ "$profile_name" = work ]; then
-    if rg -q 'cask "discord"' "$render_home/.Brewfile"; then
-      printf '%s\n' 'Personal applications leaked into the work profile.' >&2
-      exit 1
-    fi
+    for personal_item in aerospace bitwarden brave-browser claude-code discord; do
+      if rg -q "cask \"$personal_item\"" "$render_home/.Brewfile"; then
+        printf 'Personal application %s leaked into the work profile.\n' "$personal_item" >&2
+        exit 1
+      fi
+    done
 
     nvim_log="$test_root/nvim.log"
     if ! XDG_CONFIG_HOME="$render_home/.config" \
@@ -111,8 +115,11 @@ EOF
       exit 1
     fi
   else
-    rg -q 'cask "discord"' "$render_home/.Brewfile"
-    rg -q 'cask "orbstack"' "$render_home/.Brewfile"
+    uv run --python 3.12 python -c \
+      'import pathlib, tomllib; tomllib.loads(pathlib.Path("'"$render_home/.aerospace.toml"'").read_text())'
+    for personal_item in aerospace bitwarden brave-browser claude-code discord orbstack; do
+      rg -q "cask \"$personal_item\"" "$render_home/.Brewfile"
+    done
   fi
 done
 

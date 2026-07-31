@@ -4,3 +4,6 @@ README.md
 LICENSE
 bootstrap.sh
 tests
+{{ if ne .profile "personal" }}
+.aerospace.toml
+{{ end }}

@@ -47,3 +47,9 @@ compinit
 if [ -n "${brew_prefix:-}" ] && [ -f "$brew_prefix/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]; then
   source "$brew_prefix/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 fi
+
+# Machine-local configuration (employer proxies, registries, secrets) stays
+# out of this repository. This file is intentionally unmanaged.
+if [ -f "$HOME/.zshrc.local" ]; then
+  source "$HOME/.zshrc.local"
+fi

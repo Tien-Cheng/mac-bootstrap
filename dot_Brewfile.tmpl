@@ -30,12 +30,6 @@ cask "font-meslo-lg-nerd-font"
 {{- if .fullInstall }}
 
 # Requested full setup
-tap "nikitabobko/tap"
-brew "bitwarden-cli"
-cask "aerospace"
-cask "bitwarden"
-cask "brave-browser"
-cask "claude-code"
 cask "codex"
 cask "cursor"
 cask "ghostty"
@@ -44,7 +38,16 @@ cask "ghostty"
 {{- if and (eq .profile "personal") .fullInstall }}
 
 # Personal-only applications
+# Work machines skip these: browser policy (Brave), unconfirmed password-manager
+# policy (Bitwarden), default macOS window management (AeroSpace), and Claude Code
+# is installed via the native installer instead of the cask.
+tap "nikitabobko/tap"
+brew "bitwarden-cli"
+cask "aerospace"
 cask "betterdisplay"
+cask "bitwarden"
+cask "brave-browser"
+cask "claude-code"
 cask "discord"
 cask "firefox"
 cask "gcloud-cli"

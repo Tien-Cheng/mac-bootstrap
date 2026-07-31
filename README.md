@@ -33,9 +33,11 @@ Exit codes:
 
 ## Profiles
 
-The `work` profile includes the shared Go, Node, shell, Git, and Neovim toolchain. With `--full`, it also installs Cursor, Claude Code, Codex, AeroSpace, Brave, Bitwarden, and Ghostty.
+The `work` profile includes the shared Go, Node, shell, Git, and Neovim toolchain. With `--full`, it also installs Codex, Cursor, and Ghostty. Browsers, password managers, window managers, and the Claude Code cask are excluded from work machines: browser and password-manager choices follow employer policy, and Claude Code is expected via the native installer.
 
-The `personal` profile includes the same shared base and adds personal applications such as Discord, Firefox, Google Drive, IINA, Obsidian, OrbStack, Raycast, and Visual Studio Code.
+The `personal` profile includes the same shared base and adds personal applications such as AeroSpace, Bitwarden, Brave, Claude Code, Discord, Firefox, Google Drive, IINA, Obsidian, OrbStack, Raycast, and Visual Studio Code.
+
+Machine-local shell configuration (employer proxies, registries, secrets) belongs in `~/.zshrc.local`, which is sourced last and intentionally unmanaged.
 
 ## Git and SSH
 

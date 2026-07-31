@@ -38,8 +38,7 @@ EOF
     cat <<'EOF'
 
 Full-install applications:
-  Cursor, Claude Code, Codex, AeroSpace, Brave, Bitwarden,
-  Bitwarden CLI, and Ghostty
+  Codex, Cursor, and Ghostty
 EOF
   fi
 
@@ -47,7 +46,8 @@ EOF
     cat <<'EOF'
 
 Personal-only applications:
-  BetterDisplay, Discord, Firefox, Google Cloud CLI, Google Drive,
+  AeroSpace, BetterDisplay, Bitwarden, Bitwarden CLI, Brave,
+  Claude Code, Discord, Firefox, Google Cloud CLI, Google Drive,
   IINA, Obsidian, OrbStack, Raycast, and Visual Studio Code
 EOF
   fi
